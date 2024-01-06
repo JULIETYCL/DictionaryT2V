@@ -1,0 +1,2 @@
+pysimplegui<5
+requests

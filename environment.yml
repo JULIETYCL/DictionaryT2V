@@ -1,0 +1,8 @@
+name: dictionary
+channels:
+  - defaults
+dependencies:
+  - pip
+  - python=3.11.5
+  - pip:
+      - -r requirements.txt
