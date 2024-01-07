@@ -35,6 +35,7 @@ def getDefinitionLayout(word: str, definitions: list[object]):
 def getVideoLayout(sentence: str):
     layout = [
         [sg.Text('visualize the sentence of "{0}"'.format(sentence))],
+
     ]
     return layout
 
@@ -52,7 +53,7 @@ def lookupWord(word: str):
     definitions = []
 
     response = ap.callAPI(word)
-    print(response)
+    # print(response)
     if response:
         if 'results' in response:
             results = response['results']
@@ -73,61 +74,126 @@ def lookupWord(word: str):
 
     return word, definitions
 
-home_window = sg.Window("English Dictionary", getHomeLayout(), size = (300, 200))
+home_window = None
 definition_window = None
 video_window = None
 
-current_window = home_window
+current_window = None
+
+window_history = []
+
+def peek(list):
+    if list:
+        return list[len(list) - 1]
+    return None
+
+def showDefinitionWindow(word, definitions):
+    global current_window, window_history
+    if current_window:
+        current_window.Close()
+        current_window = None
+    current_window = sg.Window(
+        "Definition of '{0}'".format(word.upper()),
+        getDefinitionLayout(word, definitions),
+        size = (600, 600))
+    window_history.append({
+        'id': "definition",
+        'params': {
+            'word': word,
+            'definitions': definitions
+        }
+    })
+    return current_window
+
+def showHomeWindow(params = None):
+    global current_window, window_history
+    if current_window:
+        current_window.Close()
+        current_window = None
+    current_window = sg.Window("English Dictionary", getHomeLayout(), size = (300, 200))
+    if not window_history:
+        # Only add the home window to the history if the history is empty
+        window_history.append({
+            'id': "home",
+            'params': params
+        })
+    return current_window
+
+def showExampleWindow(example_sentence):
+    global current_window, window_history
+    if current_window:
+        current_window.Close()
+        current_window = None
+    current_window = sg.Window(
+        "Example of '{0}'".format(example_sentence),
+        getVideoLayout(example_sentence), size = (600, 600))
+    window_history.append({
+        'id': "example",
+        'params': {
+            'example_sentence': example_sentence
+        }
+    })
+    return current_window
+
+def showPreviousWindow():
+    global current_window, window_history
+    # print("Window history: {0}".format(window_history))
+    if window_history:
+        # Remove the current window from the history
+        window_history.pop()
+        if window_history:
+            # Look at the previous window before the current one
+            previous_window = window_history.pop()
+            print("Switching to previous window: {0}".format(previous_window['id']))
+            if previous_window:
+                params = previous_window['params']
+                if previous_window['id'] == "home":
+                    showHomeWindow()
+                elif previous_window['id'] == "definition":
+                    showDefinitionWindow(params['word'], params['definitions'])
+                elif previous_window['id'] == "example":
+                    showExampleWindow(params['example_sentence'])
+            else:
+                # No previous window
+                current_window = None
+    return current_window
+
+showHomeWindow()
 
 while True:
+    # Get the state for the current window from the window history
+    curr_window_state = peek(window_history)
+    if not curr_window_state:
+        # No windows in the history, user has closed the top-level window and wants to quit
+        print("Goodbye")
+        break
+    # Get the id of the current window from the window state
+    curr_window_id = curr_window_state['id']
+    print("Current Window: {0}".format(curr_window_id))
+    # Wait for an event from the current window
     event, values = current_window.read()
     # print(event, values)
-    if current_window == home_window:
-        if event == sg.WIN_CLOSED or event == "English Dictionary":
-            break
+    if event == sg.WIN_CLOSED:
+        # The current window was closed, show the previous window
+        showPreviousWindow()
+    elif curr_window_id == "home":
+        # The current window is the Home window
         if event == "Look Up":
             # User gave us a word, look it up and display its definition(s)
             if '-IN-' in values:
                 word, definitions = lookupWord(values['-IN-'])
                 print(definitions)
-
-            # Hide the main window
-            home_window.Hide()
-
             # Create and display the window for the word definition
-            if not definition_window:
-                definition_window = sg.Window(
-                    "Definition of '{0}'".format(word.upper()),
-                    getDefinitionLayout(word, definitions),
-                    size = (600, 600))
-            else:
-                definition_window.UnHide()
-            current_window = definition_window
-            print('definition_window')
-    elif current_window == definition_window:
-        if event == sg.WIN_CLOSED:
-            print('definition window closed')
-            definition_window.Close()
-            definition_window = None
-            home_window.UnHide()
-            current_window = home_window
-        if event.startswith('video_button'):
-            print('video window')
-            definition_window.Hide()
-            if not video_window:
-                example_sentence = definition_window[event].metadata
-                video_window = sg.Window(
-                    "Example of '{0}'".format(example_sentence),
-                    getVideoLayout(example_sentence), size = (600, 600))
-            else:
-                video_window.UnHide()
-            current_window = video_window
-    elif current_window == video_window:
-        if event ==sg.WIN_CLOSED:
-            video_window.Close()
-            video_window = None
-            home_window.UnHide()
-            current_window = home_window
+            showDefinitionWindow(word, definitions)
+    elif curr_window_id == "definition":
+        # The current window is the Definition window
+        if event:
+            if event.startswith('video_button'):
+                showExampleWindow(current_window[event].metadata)
+    elif curr_window_id == "example":
+        # The current window is the Example window
+        # TODO Implement this
+        pass
 
 if definition_window:
     definition_window.close()
