@@ -1,2 +1,3 @@
 pysimplegui<5
+python-vlc
 requests
