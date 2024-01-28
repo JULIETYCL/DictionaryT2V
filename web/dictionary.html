@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+
+<head>
+    <title>Dictionary.ai</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico"/>
+    <!-- Include Bootstrap library styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="app.css" rel="stylesheet" />
+</head>
+
+<body>
+    <nav class="navbar sticky-top bg-body-tertiary d-none">
+        <div class="container-fluid">
+            <a class="navbar-brand">
+                <span class="display-6 md-2">
+                    <img src="img/logo.png" height="48" style="margin-right: 0.2rem">
+                    Dictionary.ai
+                </span>
+            </a>
+            <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Word" aria-label="Word">
+                <select class="form-select me-2">
+                    <option value="" selected>Any style</option>
+                    <option value="cartoon">Cartoon style</option>
+                    <option value="photo">Photo style</option>
+                </select>
+                <button class="btn btn-outline-primary" type="submit">Lookup</button>
+            </form>
+        </div>
+    </nav>
+    <main>
+        <div id="home" class="container col-xl-10 col-xxl-8 px-4 py-5">
+            <div class="row align-items-center g-lg-5 py-5">
+                <div class="col-lg-7 text-center text-lg-start">
+                    <img src="img/logo.png" />
+                    <h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">Dictionary.ai</h1>
+                    <p class="col-lg-10 fs-4">Get started by entering a word to lookup.</p>
+                </div>
+                <div class="col-md-10 mx-auto col-lg-5">
+                    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+                        <div class="form-floating mb-3">
+                            <input type="search" class="form-control" id="floatingInput" placeholder="snow">
+                            <label for="floatingInput">Word</label>
+                        </div>
+                        <button class="w-100 btn btn-lg btn-primary" type="submit">Look up</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row align-items-center g-lg-5">
+                <div class="col-lg-7 text-center iconattrib">
+                    <small><a target="_blank" href="https://icons8.com/icon/jHeVNP6Czq2b/dictionary">Dictionary</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a></small>
+                </div>
+            </div>
+        </div>
+        <div id="definitions" class="container col-xl-10 col-xxl-8 px-4 py-1 d-none">
+            <div class="row align-items-center g-lg-3 py-1">
+                <h1 class="display-1"><span class="word"></span></h1>
+                <p class="def_count_text">Found <span class="def_count"></span> definitions.</p>
+                <ol class="definitions">
+                </ol>
+            </div>
+        </div>
+    </main>
+    <!-- Include Bootstrap library -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <!-- Include application callbacks -->
+    <script type="text/javascript" src="/paling.js"></script>
+    <!-- Client-side handlers -->
+    <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>

@@ -1,3 +1,2 @@
-pysimplegui<5
-python-vlc
+paling
 requests

@@ -1,0 +1,38 @@
+
+blockquote {
+    background-color: var(--bs-secondary-bg);
+    font-size: 1rem !important;
+    font-style: italic;
+    padding: 0.5em;
+}
+
+nav {
+    background-color: var(--bs-primary-bg-subtle) !important;
+}
+
+ol.definitions li {
+    font-size: 0.8em !important;
+}
+
+#definitions h1 {
+    font-weight: bold;
+}
+
+#definitions .def_count_text {
+    color: #0a58ca;
+}
+
+.word {
+    text-transform: capitalize;
+}
+
+.wordtype {
+    border-top: solid 3px var(--bs-border-color);
+    color: #146c43;
+    font-weight: bold;
+}
+
+#home .iconattrib, #home .iconattrib a, #home .iconattrib a:hover, #home .iconattrib a:visited {
+    color: var(--bs-tertiary-color);
+    text-decoration: none;
+}

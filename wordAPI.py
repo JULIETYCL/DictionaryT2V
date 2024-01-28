@@ -1,6 +1,6 @@
 import requests
 
-def callAPI(term):
+def lookup_word(term):
     # url = "https://wordsapiv1.p.rapidapi.com/words/{word}/definitions".format(word = str(term))
     url = "https://wordsapiv1.p.rapidapi.com/words/{word}".format(word = str(term))
     headers = {

@@ -14,7 +14,14 @@ class StableVideoDiffusion:
         # Request generated image from SVD server and return response
         response = requests.get("http://localhost:8080/img/", params = {
             'prompt' : prompt,
-            'steps' : 20
+            'steps' : 40
+        })
+        return response
+
+    def generate_video_url_for_image(self, image_data: bytearray) -> requests.Response:
+        # Request generated video from SVD server and return response
+        response = requests.post("http://localhost:8080/generate?mode=url", files = {
+            'image' : image_data
         })
         return response
 
@@ -31,4 +38,11 @@ def getVideoForImage(image_bytes: bytearray) -> bytearray:
     if response:
         video_bytes = response.content
         return video_bytes
+    return None
+
+def getVideoUrlForImage(image_bytes: bytearray) -> bytearray:
+    response = client.generate_video_url_for_image(image_data = image_bytes)
+    if response:
+        video_url = response.content
+        return video_url
     return None
