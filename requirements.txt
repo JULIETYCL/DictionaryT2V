@@ -1,2 +1,3 @@
+cx_Freeze
 paling
 requests
